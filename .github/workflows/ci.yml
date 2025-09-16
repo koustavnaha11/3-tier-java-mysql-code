@@ -1,0 +1,90 @@
+name: Kubernetes CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  helm-lint:
+    name: Lint Helm Charts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install Helm
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+      - name: Lint Helm Charts
+        run: |
+          helm lint ./charts  # Adjust the path to your charts
+
+  kube-manifest-scan:
+    name: Scan Kubernetes Manifests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install Kube Score
+        run: |
+          curl -sSLo kubescore https://github.com/zegl/kube-score/releases/latest/download/kube-score_linux_amd64
+          chmod +x kubescore
+          sudo mv kubescore /usr/local/bin/
+
+      - name: Run Kube Score
+        run: |
+          kube-score score ./k8s-manifests  # Adjust path to your k8s manifests
+
+      - name: Install Kube Linter
+        run: |
+          curl -sSLo kube-linter https://github.com/stackrox/kube-linter/releases/latest/download/kube-linter-linux
+          chmod +x kube-linter
+          sudo mv kube-linter /usr/local/bin/
+
+      - name: Run Kube Linter
+        run: |
+          kube-linter lint ./k8s-manifests
+
+  static-code-analysis:
+    name: Static Code Analysis with SonarQube
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up SonarScanner
+        uses: sonarsource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: .
+          sonarToken: ${{ secrets.SONAR_TOKEN }}
+
+  secret-scanning:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install TruffleHog
+        run: |
+          pip install trufflehog
+
+      - name: Run TruffleHog Scan
+        run: |
+          trufflehog filesystem ./  # Scan entire repo
+
+      - name: Install GitSecrets
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git-secrets
+
+      - name: Initialize GitSecrets
+        run: |
+          git secrets --install
+          git secrets --scan
