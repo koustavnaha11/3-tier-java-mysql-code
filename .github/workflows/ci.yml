@@ -37,7 +37,7 @@ jobs:
           tar -xzf kube-score.tar.gz
           chmod +x kube-score
           sudo mv kube-score /usr/local/bin/
-          kube-score --version 
+          #kube-score --version 
 
       - name: Run Kube Score
         run: |
