@@ -17,6 +17,7 @@ spec:
       containers:
         - name: my-springboot-app
           image: {{ .Values.springboot.image }}
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
@@ -30,15 +31,34 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "500m"
+              ephemeral-storage: "500Mi"
             requests:
               memory: "256Mi"
               cpu: "250m"
+              ephemeral-storage: "250Mi"
           readinessProbe:
             httpGet:
               path: /actuator/health
               port: 8080
             initialDelaySeconds: 10
             periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
           securityContext:
-            runAsUser: 1000
+            runAsUser: 10001
+            runAsGroup: 10001
             readOnlyRootFilesystem: true
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - my-springboot-app
+            topologyKey: "kubernetes.io/hostname"
