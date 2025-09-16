@@ -7,4 +7,4 @@ spec:
   selector:
     matchLabels:
       app: my-springboot-app
-   unhealthyPodEvictionPolicy: AlwaysAllow
+  unhealthyPodEvictionPolicy: AlwaysAllow
