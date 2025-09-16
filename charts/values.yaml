@@ -4,5 +4,5 @@ mysql:
   pvcSize: 5Gi
 
 springboot:
-  image: koustavnaha11/my-springboot-app:latest
+  image: koustavnaha11/my-springboot-app:1.0.0   # Fixed tag instead of 'latest'
   nodePort: 30080
