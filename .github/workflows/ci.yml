@@ -34,12 +34,11 @@ jobs:
       - name: Install Kube Score
         run: |
           curl -sSLo kubescore https://github.com/zegl/kube-score/releases/latest/download/kube-score_linux_amd64
-          chmod +x kubescore
-          sudo mv kubescore /usr/local/bin/
+          chmod +x kubescore          
 
       - name: Run Kube Score
         run: |
-          kube-score score ./k8s-manifests  # Adjust path to your k8s manifests
+          ./kube-score score ./charts/templates  # Adjust path to your k8s manifests
 
       - name: Install Kube Linter
         run: |
@@ -49,7 +48,7 @@ jobs:
 
       - name: Run Kube Linter
         run: |
-          kube-linter lint ./k8s-manifests
+          kube-linter lint ./charts/templates
 
   static-code-analysis:
     name: Static Code Analysis with SonarQube
