@@ -33,11 +33,11 @@ jobs:
 
       - name: Install Kube Score
         run: |
-          curl -sSLo kube-score https://github.com/zegl/kube-score/releases/download/v1.20.0/kube-score_1.20.0_linux_amd64
-          if [ ! -s kube-score ]; then echo "Download failed: file is empty"; exit 1; fi
+          curl -sSLo kube-score.tar.gz https://github.com/zegl/kube-score/releases/download/v1.20.0/kube-score_1.20.0_linux_amd64.tar.gz
+          tar -xzf kube-score.tar.gz
           chmod +x kube-score
           sudo mv kube-score /usr/local/bin/
-          kube-score --version  # Should output: kube-score version 1.20.0 
+          kube-score --version 
 
       - name: Run Kube Score
         run: |
