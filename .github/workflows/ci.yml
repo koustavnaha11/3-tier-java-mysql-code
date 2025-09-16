@@ -34,11 +34,12 @@ jobs:
       - name: Install Kube Score
         run: |
           curl -sSLo kubescore https://github.com/zegl/kube-score/releases/latest/download/kube-score_linux_amd64
-          chmod +x kubescore          
+          chmod +x kubescore
+          sudo mv kubescore /usr/local/bin/ 
 
       - name: Run Kube Score
         run: |
-          ./kube-score score ./charts/templates  # Adjust path to your k8s manifests
+          kube-score score ./charts/templates  # Adjust path to your k8s manifests
 
       - name: Install Kube Linter
         run: |
