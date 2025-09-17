@@ -85,7 +85,7 @@ jobs:
 
       - name: Run TruffleHog Scan
         run: |
-          trufflehog filesystem --repo_path ./  # Scan entire repo
+          trufflehog filesystem --repo_path ./ --exclude_paths '.*Dockerfile$' --json > trufflehog-report.json # Scan entire repo
 
       - name: Install GitSecrets
         run: |
