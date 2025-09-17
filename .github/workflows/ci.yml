@@ -83,9 +83,15 @@ jobs:
         run: |
           pip install trufflehog
 
+      - name: Create include_paths.txt
+        run: |
+          echo "./" > include_paths.txt
+          echo "!Dockerfile" >> include_paths.txt
+
       - name: Run TruffleHog Scan
         run: |
-          trufflehog filesystem --repo_path ./ --exclude_paths '.*Dockerfile$' --json > trufflehog-report.json # Scan entire repo
+          trufflehog filesystem --repo_path ./ -i include_paths.txt --json > trufflehog-report.json
+
 
       - name: Install GitSecrets
         run: |
