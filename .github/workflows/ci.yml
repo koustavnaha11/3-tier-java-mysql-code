@@ -85,7 +85,7 @@ jobs:
 
       - name: Run TruffleHog Scan
         run: |
-          trufflehog filesystem ./  # Scan entire repo
+          trufflehog filesystem --repo_path ./  # Scan entire repo
 
       - name: Install GitSecrets
         run: |
