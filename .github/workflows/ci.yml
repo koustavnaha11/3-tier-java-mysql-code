@@ -124,5 +124,5 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t your-dockerhub-username/your-app-name:latest .
+          docker build -t koustavnaha11/chotabomb:latest .
           docker push koustavnaha11/chotabomb:latest
