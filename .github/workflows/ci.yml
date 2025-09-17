@@ -68,7 +68,7 @@ jobs:
 
       - name: SonarCloud Scan using Maven
         run: mvn clean verify sonar:sonar \
-          -Dsonar.projectKey=koustavnaha11_3-tier-java-mysql-code\
+          -Dsonar.projectKey=koustavnaha11_3-tier-java-mysql-code \
           -Dsonar.organization=koustavnaha11 \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
